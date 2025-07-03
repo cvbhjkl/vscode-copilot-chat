@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as vscode from 'vscode';
 
-// Here we add an artifical `__vscodeBrand` to types with names which appear both
+// Here we add an artificial `__vscodeBrand` to types with names which appear both
 // in the vscode API and in this project. This helps ensure that we depend
 // on the correct types in the code which interacts with the vscode API.
 declare module 'vscode' {

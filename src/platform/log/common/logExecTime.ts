@@ -49,7 +49,9 @@ export function LogExecTime<T>(
 	return function (target: T, propertyKey: string, descriptor: PropertyDescriptor) {
 		const originalMethod = descriptor.value;
 		let idPool = 0;
-		const logName = overrideLogName ?? ((target as any)?.constructor?.name) ? ((target as any).constructor.name + '.' + propertyKey) : propertyKey;
+                const logName = overrideLogName ?? ((target as any)?.constructor?.name
+                        ? (target as any).constructor.name + '.' + propertyKey
+                        : propertyKey);
 		descriptor.value = async function (this: T, ...args: any[]) {
 			const id = idPool++;
 			const logService = getLogService(this);

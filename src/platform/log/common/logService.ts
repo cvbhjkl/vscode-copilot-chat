@@ -51,7 +51,7 @@ export interface ILogTarget {
 	show?(preserveFocus?: boolean): void;
 }
 
-// Simple implementation of a log targe used for logging to the console.
+// Simple implementation of a log target used for logging to the console.
 export class ConsoleLog implements ILogTarget {
 	constructor(private readonly prefix?: string) { }
 
@@ -78,7 +78,7 @@ export interface ILogService {
 
 /**
  * Mirrors vscode's {@link LogOutputChannel} in terms of available logging functions
- * Args has been ommitted for now in favor of simplifying the interface
+ * Arguments have been omitted for now in favor of simplifying the interface
  */
 export interface ILogger {
 	trace(message: string): void;
