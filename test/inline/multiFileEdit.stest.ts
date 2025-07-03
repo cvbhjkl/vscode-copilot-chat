@@ -117,14 +117,28 @@ forEditsAndAgent((strategy, variant, model, configurations) => {
 						selection: [29, 20, 29, 20],
 						visibleRanges: [[18, 0, 46, 0]],
 						query: '#file:extension.ts Am I properly using dotenv in this file. The process.env.OPENAI_API_KEY keeps being undefined',
-						validate: async (outcome, workspace, accessor) => {
-							// TODO@add a good validation function here
-							assert.fail('not implemented');
-						}
-					}
-				]
-			});
-		});
+                                                validate: async (outcome, workspace, accessor) => {
+                                                        if (outcome.type === 'inlineEdit') {
+                                                                assertInlineEdit(outcome);
+                                                                const text = outcome.fileContents;
+                                                                assert.ok(/dotenv\.config/ .test(text), 'Expected dotenv configuration');
+                                                                assert.ok(/process\.env\.OPENAI_API_KEY/ .test(text), 'Expected OPENAI_API_KEY usage');
+                                                                assertNoElidedCodeComments(text);
+                                                        } else if (outcome.type === 'workspaceEdit') {
+                                                                assertWorkspaceEdit(outcome);
+                                                                const content = assertFileContent(outcome.files, 'extension.ts');
+                                                                assert.ok(/dotenv\.config/ .test(content), 'Expected dotenv configuration');
+                                                                assert.ok(/process\.env\.OPENAI_API_KEY/ .test(content), 'Expected OPENAI_API_KEY usage');
+                                                                assertNoElidedCodeComments(content);
+                                                        } else {
+                                                                assert.fail(`Unexpected outcome type: ${outcome.type}`);
+                                                        }
+                                                        assert.strictEqual((await getWorkspaceDiagnostics(accessor, workspace, 'tsc')).filter(d => d.kind === 'syntactic').length, 0);
+                                                }
+                                        }
+                                ]
+                        });
+                });
 
 		stest({ description: 'import new helper function', language: 'typescript', model }, (testingServiceCollection) => {
 			return executeEditTest(strategy, testingServiceCollection, {

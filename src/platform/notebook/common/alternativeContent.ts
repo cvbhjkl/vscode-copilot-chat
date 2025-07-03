@@ -62,7 +62,7 @@ export class AlternativeNotebookContentService implements IAlternativeNotebookCo
 		//
 	}
 	getFormat(options: LanguageModelChat | IChatEndpoint | undefined): AlternativeContentFormat {
-		// GPT 4.1 supports apply_patch, such models work best with JSON format (doesn't have great support for XML yet, thats being worked on).
+                // GPT 4.1 supports apply_patch, such models work best with JSON format (doesn't have great support for XML yet, that's being worked on).
 		if (options && modelSupportsApplyPatch(options)) {
 			return 'json';
 		}
